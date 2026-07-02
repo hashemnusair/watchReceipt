@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Watch Receipt Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Noto+Sans+Arabic:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Sora:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Watch Receipt</h1>
+    <p>Fill the form, get a matching bilingual PDF.</p>
+  </header>
+
+  <main class="app-main">
+    <section class="card form-card">
+      <div class="progress" aria-hidden="true">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <form id="receiptForm" novalidate>
+        <!-- Step 1: Date -->
+        <div class="step active" data-step="1">
+          <span class="step-number">1 / 5</span>
+          <label for="inputDate">Receipt date</label>
+          <input type="date" id="inputDate" name="date" required />
+          <p class="helper">This date is also used to build the receipt number.</p>
+        </div>
+
+        <!-- Step 2: Product -->
+        <div class="step" data-step="2">
+          <span class="step-number">2 / 5</span>
+          <label for="inputProduct">Product name</label>
+          <textarea id="inputProduct" name="product" rows="3" placeholder="e.g. DJ Watch" required></textarea>
+          <p class="helper">Enter the product name verbatim. Shift+Enter (desktop) or Return (iOS) for new lines. It helps generate the receipt code.</p>
+        </div>
+
+        <!-- Step 3: Customer -->
+        <div class="step" data-step="3">
+          <span class="step-number">3 / 5</span>
+          <label for="inputCustomer">Customer name</label>
+          <input type="text" id="inputCustomer" name="customer" placeholder="e.g. John Smith" required />
+          <label for="inputCustomerAr" class="sub-label">Customer name in Arabic (auto-translated, editable)</label>
+          <input type="text" id="inputCustomerAr" name="customerAr" dir="rtl" placeholder="اسم العميل" />
+          <p class="helper">The Arabic translation is approximate — tap to correct it.</p>
+        </div>
+
+        <!-- Step 4: Price & Quantity -->
+        <div class="step" data-step="4">
+          <span class="step-number">4 / 5</span>
+          <label for="inputPrice">Unit price</label>
+          <input type="number" id="inputPrice" name="price" min="0" step="0.01" placeholder="0.00" required />
+
+          <label for="inputQty" class="sub-label">Quantity</label>
+          <input type="number" id="inputQty" name="qty" min="1" step="1" value="1" />
+
+          <label for="inputCurrency" class="sub-label">Currency</label>
+          <select id="inputCurrency" name="currency">
+            <option value="HKD" selected>HKD</option>
+            <option value="USD">USD</option>
+            <option value="JOD">JOD</option>
+          </select>
+
+          <p class="helper">Total is calculated automatically from price × quantity.</p>
+        </div>
+
+        <!-- Step 5: Review -->
+        <div class="step" data-step="5">
+          <span class="step-number">5 / 5</span>
+          <h2 class="review-title">Review</h2>
+          <dl class="review-list">
+            <div><dt>Receipt No.</dt><dd id="reviewReceiptNo">—</dd></div>
+            <div><dt>Date</dt><dd id="reviewDate">—</dd></div>
+            <div><dt>Product</dt><dd id="reviewProduct">—</dd></div>
+            <div><dt>Customer</dt><dd id="reviewCustomer">—</dd></div>
+            <div><dt>Unit price</dt><dd id="reviewPrice">—</dd></div>
+            <div><dt>Quantity</dt><dd id="reviewQty">—</dd></div>
+            <div><dt>Total</dt><dd id="reviewTotal">—</dd></div>
+          </dl>
+          <button type="button" id="downloadBtn" class="btn-primary btn-generate">Download Receipt PDF</button>
+        </div>
+
+        <div class="nav-row">
+          <button type="button" id="backBtn" class="btn-secondary hidden">Back</button>
+          <button type="button" id="nextBtn" class="btn-primary">Next</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="preview-area">
+      <h2>PDF Preview</h2>
+      <div class="preview-stage" id="previewStage">
+        <div class="receipt-scaler" id="receiptScaler">
+          <div class="receipt" id="receipt">
+          <!-- English / Chinese table -->
+          <table class="top-table">
+            <tr>
+              <td class="label">Receipt No. / 收据编号</td>
+              <td class="value" id="outReceiptNo"></td>
+            </tr>
+            <tr>
+              <td class="label">Date / 日期</td>
+              <td class="value" id="outDate"></td>
+            </tr>
+            <tr>
+              <td class="label">Supplier / 供应商</td>
+              <td class="value">Guangzhou Watch Manufacturing Co.</td>
+            </tr>
+            <tr>
+              <td class="label">Customer / 客户</td>
+              <td class="value" id="outCustomer"></td>
+            </tr>
+            <tr class="product-row">
+              <td class="label">Product / 产品</td>
+              <td class="value" id="outProduct"></td>
+            </tr>
+            <tr>
+              <td class="label">Quantity / 数量</td>
+              <td class="value" id="outQty">1</td>
+            </tr>
+            <tr>
+              <td class="label">Unit Price / 单价</td>
+              <td class="value" id="outPrice"></td>
+            </tr>
+            <tr>
+              <td class="label">Total / 总计</td>
+              <td class="value" id="outTotal"></td>
+            </tr>
+            <tr>
+              <td class="label">Payment Method / 付款方式</td>
+              <td class="value">PayPal / 贝宝</td>
+            </tr>
+          </table>
+
+          <!-- Arabic table -->
+          <table class="arabic-table">
+            <tr>
+              <td class="label">رقم الإيصال</td>
+              <td class="value" id="outReceiptNoAr" dir="ltr"></td>
+            </tr>
+            <tr>
+              <td class="label">التاريخ</td>
+              <td class="value" id="outDateAr" dir="rtl"></td>
+            </tr>
+            <tr>
+              <td class="label">المورد</td>
+              <td class="value">
+                <span dir="ltr">Guangzhou Watch Manufacturing Co.</span>
+                <span class="supplier-ar">شركة قوانغتشو لتصنيع الساعات</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">العميل</td>
+              <td class="value" id="outCustomerAr" dir="rtl"></td>
+            </tr>
+            <tr class="product-row">
+              <td class="label">المنتج</td>
+              <td class="value" id="outProductAr" dir="ltr"></td>
+            </tr>
+            <tr>
+              <td class="label">الكمية</td>
+              <td class="value" id="outQtyAr" dir="ltr">1</td>
+            </tr>
+            <tr>
+              <td class="label">سعر الوحدة</td>
+              <td class="value" id="outPriceAr" dir="ltr"></td>
+            </tr>
+            <tr>
+              <td class="label">الإجمالي</td>
+              <td class="value" id="outTotalAr" dir="ltr"></td>
+            </tr>
+            <tr>
+              <td class="label">طريقة الدفع</td>
+              <td class="value payment-ar" dir="ltr">PayPal / 贝宝 / باي بال</td>
+            </tr>
+          </table>
+        </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

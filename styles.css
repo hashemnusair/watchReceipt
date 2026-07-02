@@ -1,0 +1,356 @@
+:root {
+  --bg: #f6f5f2;
+  --card: #ffffff;
+  --ink: #1a1a1a;
+  --muted: #6b6b6b;
+  --border: #e2e2e2;
+  --accent: #2d2d2d;
+  --accent-text: #ffffff;
+  --radius: 22px;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Sora", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-header {
+  text-align: center;
+  padding: 32px 20px 18px;
+}
+
+.app-header h1 {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 2rem;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
+
+.app-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.app-main {
+  padding: 0 16px 48px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.form-card {
+  padding: 24px;
+}
+
+.progress {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 20%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.step {
+  display: none;
+  animation: fadeIn 0.25s ease;
+}
+
+.step.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-number {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.sub-label {
+  margin-top: 18px;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 14px 14px;
+  font-size: 16px;
+  font-family: inherit;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fafafa;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+textarea {
+  min-height: 92px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%236b6b6b' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(45, 45, 45, 0.08);
+  background: #fff;
+}
+
+input[dir="rtl"],
+textarea[dir="rtl"] {
+  text-align: right;
+}
+
+.helper {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.nav-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.nav-row .btn-primary,
+.nav-row .btn-secondary {
+  flex: 1;
+}
+
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.btn-secondary {
+  background: #ededed;
+  color: var(--ink);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.review-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.4rem;
+  margin: 0 0 14px;
+}
+
+.review-list {
+  margin: 0 0 20px;
+}
+
+.review-list > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.review-list dt {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.review-list dd {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: right;
+}
+
+.btn-generate {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.preview-area {
+  margin-top: 32px;
+}
+
+.preview-area h2 {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.3rem;
+  margin: 0 0 14px;
+  text-align: center;
+}
+
+.preview-stage {
+  background: #e8e8e8;
+  border-radius: var(--radius);
+  padding: 14px;
+  overflow: auto;
+  max-height: 65vh;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.receipt-scaler {
+  display: inline-block;
+}
+
+/* ---------------- Receipt (PDF source) ---------------- */
+.receipt {
+  width: 210mm;
+  min-height: 285mm;
+  padding: 15mm 15mm 8mm;
+  background: #ffffff;
+  color: #000000;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  line-height: 1.35;
+  box-sizing: border-box;
+}
+
+.receipt table:last-child {
+  margin-bottom: 0;
+}
+
+.receipt table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10mm;
+  table-layout: fixed;
+}
+
+.receipt td {
+  border: 1px solid #000000;
+  padding: 8px 10px;
+  vertical-align: middle;
+  font-size: 13px;
+  word-wrap: break-word;
+}
+
+.receipt .label {
+  width: 40%;
+}
+
+.receipt .value {
+  width: 60%;
+}
+
+.receipt tr:not(.product-row) td {
+  height: 11mm;
+}
+
+.receipt .product-row td {
+  height: 28mm;
+  vertical-align: top;
+}
+
+.receipt .arabic-table {
+  direction: rtl;
+  font-family: "Noto Sans Arabic", Arial, sans-serif;
+}
+
+.receipt .arabic-table td {
+  text-align: right;
+}
+
+.receipt .arabic-table .value {
+  text-align: center;
+}
+
+.receipt .top-table .value#outProduct,
+.receipt .arabic-table .value#outProductAr {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.receipt .supplier-ar {
+  display: block;
+  font-size: 11px;
+  margin-top: 3px;
+  font-family: "Noto Sans Arabic", Arial, sans-serif;
+}
+
+.receipt .payment-ar {
+  font-family: "Noto Sans Arabic", "Noto Sans SC", Arial, sans-serif;
+}
+
+@media (min-width: 720px) {
+  .app-main {
+    padding: 0 24px 64px;
+  }
+
+  .form-card {
+    padding: 32px;
+  }
+}
