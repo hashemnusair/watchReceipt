@@ -117,11 +117,12 @@
 
   function formatArDate(y, m, d) {
     const date = new Date(y, m - 1, d);
-    return new Intl.DateTimeFormat('ar-SA', {
+    return date.toLocaleDateString('ar', {
+      calendar: 'gregory',
       year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date);
+      month: 'long',
+      day: 'numeric'
+    });
   }
 
   function formatEnDate(y, m, d) {
